@@ -17,20 +17,13 @@ You'll need to have lirc configured. There are some [decent instructions here](h
 
 Building & Installing
 =====================
-Generate the C code:
+Generate the C code and then install using setup.py:
 
     $ cython -3 -a lirc.pyx
+    $ sudo python3 setup.py install
 
-Compile and link:
-
-    $ gcc -pthread -fno-strict-aliasing -DNDEBUG -g -fwrapv -O2 -Wall -Wstrict-prototypes -I/usr/include/lirc/ -fPIC -I/usr/include/python3.2 -c lirc.c -o lirc.o
-    $ gcc -pthread -shared -Wl,-O1 -Wl,-Bsymbolic-functions -Wl,-z,relro -L/usr/lib/ -L/usr/lib/ -I/usr/include/lirc/ lirc.o -llirc_client -o lirc.so
-
-lirc.so is the extension. I'll get a Makefile up soon.
-
-
-Examples
-========
+Configuration
+=============
 You need a configuration file in the lirc format. I've included an example one.
 
     $ cat example_config 
@@ -38,7 +31,7 @@ You need a configuration file in the lirc format. I've included an example one.
       remote = *
       button = 1          # what button is pressed on the remote
       prog = python-lirc  # program tag to handle this command
-      config = one        # string given
+      config = one, horse # string given
     end
 
     begin
@@ -55,16 +48,16 @@ You need a configuration file in the lirc format. I've included an example one.
       config = three
     end
 
-Here is how you set it up:
+Example
+=======
+Setup:
 
     $ python3
     >>> import lirc
-    >>> lirc.init("python-lirc")  # this is the program tag (returns socket #)
-    3
+    >>> sockid = lirc.init("python-lirc")  # arg is program tag
     >>> lirc.load_config_file("./example_config")
 
-`lirc.nextcode()` will block and return a list of the strings given in the config.
+Getting the codes:
 
-    >>> lirc.nextcode()
-    # press 1 on remote
-    ['one']
+    >>> lirc.nextcode()  # press 1 on remote after this
+    ['one', 'horse']
