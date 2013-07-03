@@ -34,12 +34,6 @@ You need a valid [lircrc configuration file](http://www.lirc.org/html/configure.
       config = two
     end
 
-    begin
-      button = 3
-      prog = myprogram
-      config = three
-    end
-
 Use
 ===
 
