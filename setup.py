@@ -33,7 +33,7 @@ lirc_ext = Extension(
 
 setup(
     name='python-lirc',
-    version='1.0',
+    version='1.1',
     description='Python bindings for LIRC.',
     author='Thomas Preston',
     author_email='thomasmarkpreston@gmail.com',
