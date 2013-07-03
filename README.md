@@ -1,63 +1,60 @@
 python-lirc
 ===========
 
-Python LIRC extension written in Cython for Python 3 (and 2).
+LIRC extension written in Cython for Python 3 (and 2).
+[PyPI](https://pypi.python.org/pypi/python-lirc/)
 
-There was no good support for LIRC in Python 3. Cython is fast, modern and
-backwards-compatible. :-)
 
-Please test if you have an IR receiver.
-
-Dependencies
-============
-
-    $ aptitude install cython gcc lirc
+Install
+=======
 
 You'll need to have lirc configured. There are some [decent instructions here](http://learn.adafruit.com/using-an-ir-remote-with-a-raspberry-pi-media-center/lirc).
 
-Building & Installing
-=====================
-Generate the C code and then install using setup.py:
-
-    $ cython -3 -a lirc.pyx
+    $ sudo aptitude install cython gcc lirc
+    $ git clone https://github.com/tompreston/python-lirc.git
+    $ cd python-lirc/
     $ sudo python3 setup.py install
 
-Configuration
-=============
-You need a configuration file in the lirc format. I've included an example one.
 
-    $ cat example_config 
+Configure
+=========
+
+You need a valid [lircrc configuration file](http://www.lirc.org/html/configure.html#lircrc_format). For example:
+
+    $ cat ~/.lircrc
     begin
-      remote = *
       button = 1          # what button is pressed on the remote
-      prog = python-lirc  # program tag to handle this command
-      config = one, horse # string given
+      prog = myprogram    # program to handle this command
+      config = one, horse # configs are given to program as list
     end
 
     begin
-      remote = *
       button = 2
-      prog = python-lirc
+      prog = myprogram
       config = two
     end
 
     begin
-      remote = *
       button = 3
-      prog = python-lirc
+      prog = myprogram
       config = three
     end
 
-Example
-=======
-Setup:
+Use
+===
 
     $ python3
     >>> import lirc
-    >>> sockid = lirc.init("python-lirc")  # arg is program tag
-    >>> lirc.load_config_file("./example_config")
-
-Getting the codes:
-
+    >>> sockid = lirc.init("myprogram")
     >>> lirc.nextcode()  # press 1 on remote after this
     ['one', 'horse']
+    >>> lirc.deinit()
+
+Load custom configurations with:
+
+    >>> lirc.load_config_file("another-config-file")
+
+Set whether nextcode blocks or not with:
+
+    >>> sockid = lirc.init("myprogram")
+    >>> lirc.set_blocking(True, sockid)

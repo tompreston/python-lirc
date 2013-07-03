@@ -25,6 +25,8 @@ cimport lirc_client
 
 ENCODING = 'utf-8'
 STRING_BUFFER_LEN = 256
+LOCAL_CONFIG_FILE = "~/.lircrc"
+GLOBAL_CONFIG_FILE = "/etc/lirc/lircrc"
 
 initialised = False
 config = None
@@ -67,8 +69,8 @@ cdef class LircConfig:
     def add_config_file(self, config_filename):
         if config_filename is not None:
             lirc_client.lirc_readconfig(
-                config_filename, 
-                &self._c_lirc_config, 
+                config_filename,
+                &self._c_lirc_config,
                 NULL)
         else:
             lirc_client.lirc_readconfig(
@@ -81,7 +83,7 @@ cdef class LircConfig:
                 "Could not load the config file (%s)" % config_filename)
 
     def code2char(self, char * code):
-        """Returns the (byte) string associated with the code in the 
+        """Returns the (byte) string associated with the code in the
         config file
         """
         self.is_init_or_error()
@@ -120,10 +122,15 @@ def init(program_name, blocking=True, verbose=False):
     b_program_name = bytes(program_name, ENCODING)
     lirc_socket = lirc_client.lirc_init(b_program_name, 1 if verbose else 0)
     if lirc_socket == -1:
-        raise LircInitError("Unable to initialise lirc!")
+        raise LircInitError("Unable to initialise lirc.")
 
     set_blocking(blocking, lirc_socket)
     initialised = True
+
+    try:
+        load_config_file(LOCAL_CONFIG_FILE)
+    except ConfigLoadError:
+        load_config_file(GLOBAL_CONFIG_FILE)
     return lirc_socket
 
 
@@ -131,7 +138,7 @@ def deinit():
     global initialised
     if initialised:
         if lirc_client.lirc_deinit() == -1:
-            raise LircDeinitError("Unable to de-initialise lirc!")
+            raise LircDeinitError("Unable to de-initialise lirc.")
         config = None
         initialised = False
 
@@ -170,8 +177,10 @@ def nextcode():
     strings = list()
     while True:
         global config
-        try: strings.append(config.code2char(code))
-        except NoMoreStrings: break
+        try:
+            strings.append(config.code2char(code))
+        except NoMoreStrings:
+            break
 
     free(code)
     return strings
@@ -180,13 +189,14 @@ def nextcode():
 def set_blocking(blocking, lirc_socket):
     """Sets whether the nextcode function blocks"""
     fcntl.fcntl(lirc_socket, fcntl.F_SETOWN, unistd.getpid())
-    flags = fcntl.fcntl(lirc_socket, fcntl.F_GETFL, 0);
+    flags = fcntl.fcntl(lirc_socket, fcntl.F_GETFL, 0)
     if(flags == 0):
         fcntl.fcntl(
             lirc_socket,
             fcntl.F_SETFL,
             (flags & ~fcntl.O_NONBLOCK) |(0 if blocking else fcntl.O_NONBLOCK)
         )
+
 
 def _is_init_or_error():
     global initialised
