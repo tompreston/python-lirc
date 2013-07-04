@@ -4,5 +4,4 @@ Change Log
 v1.1
 ------
 - Tidied up project structure.
-- setup.py now handled Cython compilation.
 - init now tries to use config at ~/.lircrc and then /etc/lirc/lircrc.

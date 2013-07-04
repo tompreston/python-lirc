@@ -1,0 +1,6 @@
+begin
+    prog = lirctest
+    button = 1
+    config = horses
+    repeat = 0
+end

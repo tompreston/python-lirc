@@ -32,11 +32,11 @@ initialised = False
 config = None
 
 
-class LircInitError(Exception):
+class InitError(Exception):
     pass
 
 
-class LircDeinitError(Exception):
+class DeinitError(Exception):
     pass
 
 
@@ -57,7 +57,7 @@ class NoMoreStrings(Exception):
 
 
 cdef class LircConfig:
-    cdef lirc_client.lirc_config* _c_lirc_config
+    cdef lirc_client.lirc_config * _c_lirc_config
 
     def __cinit__(self, config_filename):
         self.add_config_file(config_filename)
@@ -69,14 +69,10 @@ cdef class LircConfig:
     def add_config_file(self, config_filename):
         if config_filename is not None:
             lirc_client.lirc_readconfig(
-                config_filename,
-                &self._c_lirc_config,
-                NULL)
+                config_filename, &self._c_lirc_config, NULL)
         else:
             lirc_client.lirc_readconfig(
-                NULL,
-                &self._c_lirc_config,
-                NULL)
+                NULL, &self._c_lirc_config, NULL)
 
         if self._c_lirc_config is NULL:
             raise ConfigLoadError(
@@ -88,8 +84,9 @@ cdef class LircConfig:
         """
         self.is_init_or_error()
 
-        cdef char* string_buf = <char*>calloc(STRING_BUFFER_LEN, sizeof(char))
-        cdef char* string_buf_2 = string_buf  # string_buf might be destroyed
+        cdef char * string_buf = \
+            <char * >calloc(STRING_BUFFER_LEN, sizeof(char))
+        cdef char * string_buf_2 = string_buf  # string_buf might be destroyed
 
         status = lirc_client.lirc_code2char(
             self._c_lirc_config, code, &string_buf)
@@ -110,46 +107,65 @@ cdef class LircConfig:
     def is_init_or_error(self):
         """Throws an error if not initialised"""
         if self._c_lirc_config is NULL:
-            raise LircInitError("LircConfig has not been inititalised.")
+            raise InitError("LircConfig has not been inititalised.")
 
 
-def init(program_name, blocking=True, verbose=False):
+def init(program_name, config_filename=None, blocking=True, verbose=False):
     global initialised
     if initialised:
         return
 
     # init lirc
-    b_program_name = bytes(program_name, ENCODING)
+    b_program_name = program_name.encode(ENCODING)
     lirc_socket = lirc_client.lirc_init(b_program_name, 1 if verbose else 0)
     if lirc_socket == -1:
-        raise LircInitError("Unable to initialise lirc.")
+        raise InitError(
+            "Unable to initialise lirc (socket was -1 from C library).")
 
     set_blocking(blocking, lirc_socket)
     initialised = True
 
-    try:
-        load_config_file(LOCAL_CONFIG_FILE)
-    except ConfigLoadError:
-        load_config_file(GLOBAL_CONFIG_FILE)
+    if config_filename:
+        load_config_file(config_filename)
+    else:
+        try:
+            load_default_config()
+        except ConfigLoadError as e:
+            raise InitError("Unable to load default config {} or {}.".format(
+                    LOCAL_CONFIG_FILE, GLOBAL_CONFIG_FILE)) from e
+
     return lirc_socket
 
 
 def deinit():
     global initialised
-    if initialised:
-        if lirc_client.lirc_deinit() == -1:
-            raise LircDeinitError("Unable to de-initialise lirc.")
-        config = None
-        initialised = False
+    if not initialised:
+        return
+
+    if lirc_client.lirc_deinit() == -1:
+        raise DeinitError("Unable to de-initialise lirc.")
+    config = None
+    initialised = False
+
+
+def load_default_config():
+    """Attempts to load the default lirc config files."""
+    try:
+        load_config_file(LOCAL_CONFIG_FILE)
+    except ConfigLoadError as local_conf_error:
+        try:
+            load_config_file(GLOBAL_CONFIG_FILE)
+        except ConfigLoadError as global_conf_error:
+            raise global_conf_error from local_conf_error
 
 
 def load_config_file(config_filename=None):
-    """Adds a configuration file for this instance of lirc"""
+    """Adds a configuration file for this instance of lirc."""
     _is_init_or_error()
 
     # read config
     if config_filename:
-        b_config_filename = bytes(config_filename, ENCODING)
+        b_config_filename = config_filename.encode(ENCODING)
     else:
         b_config_filename = None
 
@@ -194,11 +210,11 @@ def set_blocking(blocking, lirc_socket):
         fcntl.fcntl(
             lirc_socket,
             fcntl.F_SETFL,
-            (flags & ~fcntl.O_NONBLOCK) |(0 if blocking else fcntl.O_NONBLOCK)
+            (flags & ~fcntl.O_NONBLOCK) | (0 if blocking else fcntl.O_NONBLOCK)
         )
 
 
 def _is_init_or_error():
     global initialised
     if not initialised:
-        raise LircInitError("%s has not been initialised." % __name__)
+        raise InitError("%s has not been initialised." % __name__)

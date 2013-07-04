@@ -8,12 +8,22 @@ LIRC extension written in Cython for Python 3 (and 2).
 Install
 =======
 
-You'll need to have lirc configured. There are some [decent instructions here](http://learn.adafruit.com/using-an-ir-remote-with-a-raspberry-pi-media-center/lirc).
+You'll need to have [lirc configured](http://www.lirc.org/html/configure.html)
+and you may need to install cython (`aptitude install cython gcc`):
 
-    $ sudo aptitude install cython gcc lirc
-    $ git clone https://github.com/tompreston/python-lirc.git
-    $ cd python-lirc/
-    $ sudo python3 setup.py install
+Download, compile and install for Python 3 and 2.
+
+    git clone https://github.com/tompreston/python-lirc.git
+    cd python-lirc/
+    make py3
+    sudo python3 setup.py install
+    make py2
+    sudo python setup.py install
+
+Or just install straight from PyPI:
+
+    sudo easy_install3 python-lirc
+    sudo easy_install python-lirc
 
 
 Configure
@@ -46,9 +56,10 @@ Use
 
 Load custom configurations with:
 
-    >>> lirc.load_config_file("another-config-file")
+    >>> sockid = lirc.init("myprogram", "mylircrc")
+    >>> lirc.load_config_file("another-config-file") # subsequent configs
 
 Set whether nextcode blocks or not with:
 
-    >>> sockid = lirc.init("myprogram")
-    >>> lirc.set_blocking(True, sockid)
+    >>> sockid = lirc.init("myprogram", blocking=False)
+    >>> lirc.set_blocking(True, sockid)  # or this
