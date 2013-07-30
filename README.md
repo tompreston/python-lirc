@@ -9,7 +9,9 @@ Install
 =======
 
 You'll need to have [lirc configured](http://www.lirc.org/html/configure.html)
-and you may need to install cython (`aptitude install cython gcc`):
+and installed and you may also need to install cython. Run this to be sure:
+
+    $ sudo aptitude install liblircclient-dev cython gcc
 
 Download, compile and install for Python 3 and 2.
 
