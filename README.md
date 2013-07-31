@@ -17,10 +17,8 @@ Download, compile and install for Python 3 and 2.
 
     git clone https://github.com/tompreston/python-lirc.git
     cd python-lirc/
-    make py3
-    sudo python3 setup.py install
-    make py2
-    sudo python setup.py install
+    make py3 && sudo python3 setup.py install
+    make py2 && sudo python setup.py install
 
 Or just install straight from PyPI:
 
