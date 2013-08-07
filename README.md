@@ -8,22 +8,9 @@ LIRC extension written in Cython for Python 3 (and 2).
 Install
 =======
 
-You'll need to have [lirc configured](http://www.lirc.org/html/configure.html)
-and installed and you may also need to install cython. Run this to be sure:
+Download the latest relase and install with:
 
-    $ sudo aptitude install liblircclient-dev cython gcc
-
-Download, compile and install for Python 3 and 2.
-
-    git clone https://github.com/tompreston/python-lirc.git
-    cd python-lirc/
-    make py3 && sudo python3 setup.py install
-    make py2 && sudo python setup.py install
-
-Or just install straight from PyPI:
-
-    sudo easy_install3 python-lirc
-    sudo easy_install python-lirc
+    $ sudo dpkg -i python3-lirc_1.2.0-1_all.deb
 
 
 Configure
@@ -63,3 +50,23 @@ Set whether nextcode blocks or not with:
 
     >>> sockid = lirc.init("myprogram", blocking=False)
     >>> lirc.set_blocking(True, sockid)  # or this
+
+
+Building and Installing
+=======================
+If you want to install manually then you may also need to install
+cython and some dev libraries:
+
+    $ sudo aptitude install liblircclient-dev cython gcc
+
+Download, compile and install for Python 3 and 2.
+
+    git clone https://github.com/tompreston/python-lirc.git
+    cd python-lirc/
+    make py3 && sudo python3 setup.py install
+    make py2 && sudo python setup.py install
+
+Or just install straight from PyPI:
+
+    sudo easy_install3 python-lirc
+    sudo easy_install python-lirc
