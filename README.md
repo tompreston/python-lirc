@@ -8,7 +8,8 @@ LIRC extension written in Cython for Python 3 (and 2).
 Install
 =======
 
-Download the latest relase and install with:
+Download the latest relase from
+[here](https://github.com/tompreston/python-lirc/releases) and install with:
 
     $ sudo dpkg -i python3-lirc_1.2.0-1_all.deb
 
