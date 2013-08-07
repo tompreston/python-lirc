@@ -1,5 +1,4 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
+import sys
 from distutils.core import setup, Extension
 
 
@@ -13,7 +12,7 @@ lirc_ext = Extension(
 
 setup(
     name='python-lirc',
-    version='1.1',
+    version='1.2.0',
     description='Python bindings for LIRC.',
     author='Thomas Preston',
     author_email='thomasmarkpreston@gmail.com',
