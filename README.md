@@ -1,9 +1,7 @@
 python-lirc
 ===========
 
-LIRC extension written in Cython for Python 3 (and 2).
-
-I'm trying to get this into
+LIRC extension written in Cython for Python 3 (and 2). I'm trying to get this into
 [Debian](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=Bug%23718980)
 
 [PyPI](https://pypi.python.org/pypi/python-lirc/)
