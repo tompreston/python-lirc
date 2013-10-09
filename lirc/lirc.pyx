@@ -125,7 +125,7 @@ def init(program_name, config_filename=None, blocking=True, verbose=False):
     set_blocking(blocking, lirc_socket)
     initialised = True
 
-    if config_filename:
+    if config_filename is not None:
         load_config_file(config_filename)
     else:
         try:
