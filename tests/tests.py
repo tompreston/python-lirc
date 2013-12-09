@@ -1,6 +1,10 @@
-import unittest
-import lirc
+import os
+import sys
 import time
+import unittest
+parentdir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.insert(0, parentdir + "/build/lib.linux-armv6l-3.2/")
+import lirc
 
 
 class TestNextCode(unittest.TestCase):
@@ -22,11 +26,20 @@ class TestNonBlocking(unittest.TestCase):
         lirc.init("lirctest", "tests/lircrc.test", blocking=False)
 
     def test_nonblocking_nextcode(self):
+        print("Don't press anything yet...")
+        start_time = time.time()
+        end_time = start_time + 1  # 1 second in the future
+        pressed = False
+        while not pressed and time.time() < end_time:
+            if lirc.nextcode() == ["horses"]:
+                pressed = True
+        self.assertFalse(pressed)
+
         print("Press 1 on your remote.")
         start_time = time.time()
         end_time = start_time + 5  # 5 seconds in the future
         pressed = False
-        while not pressed or time.time() < end_time:
+        while not pressed and time.time() < end_time:
             if lirc.nextcode() == ["horses"]:
                 pressed = True
         self.assertTrue(pressed)

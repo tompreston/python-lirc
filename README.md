@@ -59,7 +59,7 @@ Building and Installing
 If you want to install manually then you may also need to install
 cython and some dev libraries:
 
-    $ sudo aptitude install liblircclient-dev cython gcc
+    $ sudo aptitude install python{,3}-dev liblircclient-dev cython gcc
 
 Download, compile and install for Python 3 and 2.
 
