@@ -8,12 +8,15 @@ LIRC extension written in Cython for Python 3 (and 2). I'm trying to get this in
 
 Install
 =======
+`python-lirc` is in the main repositories for Raspbian. If you're on a
+RaspberryPi you can just run:
 
-Download the latest relase from
+    $ sudo apt-get install python-lirc
+
+Otherwise, download the latest relase from
 [here](https://github.com/tompreston/python-lirc/releases) and install with:
 
-    $ sudo dpkg -i python3-lirc_1.2.0-1_all.deb
-
+    $ sudo dpkg -i python3-lirc_1.2.1-1_all.deb
 
 Configure
 =========
@@ -48,7 +51,7 @@ Load custom configurations with:
     >>> sockid = lirc.init("myprogram", "mylircrc")
     >>> lirc.load_config_file("another-config-file") # subsequent configs
 
-Set whether nextcode blocks or not with:
+Set whether `nextcode` blocks or not with:
 
     >>> sockid = lirc.init("myprogram", blocking=False)
     >>> lirc.set_blocking(True, sockid)  # or this
@@ -73,3 +76,10 @@ Or just install straight from PyPI:
 
     sudo easy_install3 python-lirc
     sudo easy_install python-lirc
+
+Development
+===========
+1. Install the dev libraries as above.
+2. Make changes to `lirc/lirc.pyx`.
+3. Compile with `make py3 && python3 setup.py build`
+4. Test with `python3 tests/tests.py`

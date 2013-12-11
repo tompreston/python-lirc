@@ -187,7 +187,8 @@ def nextcode():
         free(code)
         raise NextCodeError("There was an error reading the next code.")
     if code == NULL:
-        raise NextCodeError("There was no complete code available.")
+        # raise NextCodeError("There was no complete code available.")
+        return list()
 
     # get all of the strings associated with this code
     strings = list()
@@ -206,12 +207,8 @@ def set_blocking(blocking, lirc_socket):
     """Sets whether the nextcode function blocks"""
     fcntl.fcntl(lirc_socket, fcntl.F_SETOWN, unistd.getpid())
     flags = fcntl.fcntl(lirc_socket, fcntl.F_GETFL, 0)
-    if(flags == 0):
-        fcntl.fcntl(
-            lirc_socket,
-            fcntl.F_SETFL,
-            (flags & ~fcntl.O_NONBLOCK) | (0 if blocking else fcntl.O_NONBLOCK)
-        )
+    flags = (flags & ~fcntl.O_NONBLOCK) | (0 if blocking else fcntl.O_NONBLOCK)
+    fcntl.fcntl(lirc_socket, fcntl.F_SETFL, flags)
 
 
 def _is_init_or_error():
