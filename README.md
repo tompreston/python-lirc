@@ -8,10 +8,10 @@ LIRC extension written in Cython for Python 3 (and 2). I'm trying to get this in
 
 Install
 =======
-`python-lirc` is in the main repositories for Raspbian. If you're on a
+`python-lirc` and `python3-lirc` are in the main repositories for Raspbian. If you're on a
 RaspberryPi you can just run:
 
-    $ sudo apt-get install python-lirc
+    $ sudo apt-get install python3-lirc # or python-lirc
 
 Otherwise, download the latest relase from
 [here](https://github.com/tompreston/python-lirc/releases) and install with:
