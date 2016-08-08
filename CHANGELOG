@@ -1,6 +1,15 @@
 Change Log
 ==========
 
+v1.2.3
+------
+- Rebuilt (again) and uploaded to PyPi.
+- Added requirements.txt
+
+v1.2.2
+------
+- Rebuilt and uploaded to PyPi.
+
 v1.2.1
 ------
 - Fixed `set_blocking` bug (issue #2).
