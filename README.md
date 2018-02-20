@@ -1,22 +1,12 @@
 python-lirc
 ===========
 
-LIRC extension written in Cython for Python 3 (and 2). I'm trying to get this into
-[Debian](http://bugs.debian.org/cgi-bin/bugreport.cgi?bug=Bug%23718980)
-
 [PyPI](https://pypi.python.org/pypi/python-lirc/)
 
 Install
 =======
-`python-lirc` and `python3-lirc` are in the main repositories for Raspbian. If you're on a
-RaspberryPi you can just run:
 
-    $ sudo apt-get install python3-lirc # or python-lirc
-
-Otherwise, download the latest relase from
-[here](https://github.com/tompreston/python-lirc/releases) and install with:
-
-    $ sudo dpkg -i python3-lirc_1.2.1-1_all.deb
+    pip3 install python3-lirc
 
 Configure
 =========
@@ -62,8 +52,7 @@ Building and Installing
 If you want to install manually then you may also need to install
 cython and some dev libraries:
 
-    $ sudo aptitude install liblircclient-dev cython gcc \
-      python{,3}-setuptools python{,3}-dev
+    sudo apt install cython gcc liblircclient-dev python{,3}-{dev,setuptools}
 
 Download, compile and install for Python 3 and 2.
 
@@ -71,11 +60,6 @@ Download, compile and install for Python 3 and 2.
     cd python-lirc/
     make py3 && sudo python3 setup.py install
     make py2 && sudo python setup.py install
-
-Or just install straight from PyPI:
-
-    sudo easy_install3 python-lirc
-    sudo easy_install python-lirc
 
 Development
 ===========
