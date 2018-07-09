@@ -12,5 +12,5 @@ cdef extern from "lirc/lirc_client.h":
     int lirc_readconfig(char *file,  lirc_config **config, void * check_callback)
     void lirc_freeconfig(lirc_config *config)
 
-    int lirc_nextcode(char **code)
+    int lirc_nextcode(char **code) nogil
     int lirc_code2char(lirc_config *config, char *code, char **string)

@@ -222,7 +222,10 @@ def nextcode():
     _is_init_or_error()
 
     cdef char * code
-    if lirc_client.lirc_nextcode(&code) == -1:
+    cdef int return_value
+    with nogil:
+        return_value = lirc_client.lirc_nextcode(&code)
+    if return_value == -1:
         free(code)
         raise NextCodeError("There was an error reading the next code.")
     if code == NULL:
