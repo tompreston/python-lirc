@@ -1,0 +1,13 @@
+# OSX
+.DS_Store
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.coverage
+.cache
+.pytest_cache
+nosetests.xml
+coverage.xml
+
+
