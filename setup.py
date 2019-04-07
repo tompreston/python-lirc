@@ -1,5 +1,6 @@
 import sys
-from distutils.core import setup, Extension
+from setuptools import setup, Extension, find_packages
+from Cython.Build import cythonize
 
 
 lirc_ext = Extension(
@@ -7,7 +8,7 @@ lirc_ext = Extension(
     include_dirs=['/usr/include/lirc/'],
     libraries=['lirc_client'],
     library_dirs=['/usr/lib'],
-    sources=['lirc/lirc.c']
+    sources=['lirc/lirc.pyx']
 )
 
 setup(
@@ -18,7 +19,10 @@ setup(
     author_email='thomasmarkpreston@gmail.com',
     license='GPLv3+',
     url='https://github.com/tompreston/python-lirc',
-    ext_modules=[lirc_ext],
+    setup_requires=['Cython>=0.28.2'],
+    packages=find_packages(),
+    ext_modules=cythonize([lirc_ext]),
+    zip_safe=False,
     long_description=open('README.md').read() + open('CHANGELOG').read(),
     classifiers=[
         "License :: OSI Approved :: GNU Affero General Public License v3 or "
