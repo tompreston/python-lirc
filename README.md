@@ -1,5 +1,18 @@
-python-lirc
-===========
+python-lirc (deprecated)
+========================
+
+Since Linux 4.18, IR is now handled in-kernel and IR events appear just like
+keyboard or mouse events, making the LIRC daemon and clients (like python-lirc)
+mostly redundant. The new way to configure keymaps is using ir-keytable which
+comes with v4l-utils. See
+https://github.com/tompreston/python-lirc/issues/28#issuecomment-712454662
+
+Next steps:
+- [x] Close issues
+- [ ] Close pull requests
+- [ ] Archive repo
+
+---
 
 [PyPI](https://pypi.python.org/pypi/python-lirc/)
 
