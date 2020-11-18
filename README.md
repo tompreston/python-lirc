@@ -9,8 +9,8 @@ https://github.com/tompreston/python-lirc/issues/28#issuecomment-712454662
 
 Next steps:
 - [x] Close issues
-- [ ] Close pull requests
-- [ ] Archive repo
+- [x] Close pull requests
+- [x] Archive repo
 
 ---
 
